@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectLast.Migrations
 {
-    public partial class allmi : Migration
+    public partial class allmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -65,26 +65,6 @@ namespace ProjectLast.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Citizens",
-                columns: table => new
-                {
-                    SSN = table.Column<int>(type: "int", nullable: false),
-                    First_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Last_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    POB = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Woreda = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Kebele = table.Column<int>(type: "int", nullable: false),
-                    Blood_Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Age = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Citizens", x => x.SSN);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Information",
                 columns: table => new
                 {
@@ -93,6 +73,18 @@ namespace ProjectLast.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Information", x => x.Type);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SSNs",
+                columns: table => new
+                {
+                    CityCode = table.Column<int>(type: "int", nullable: false),
+                    CurrentNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SSNs", x => x.CityCode);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,20 +194,50 @@ namespace ProjectLast.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SSNs",
+                name: "Citizens",
                 columns: table => new
                 {
+                    SSN = table.Column<int>(type: "int", nullable: false),
+                    First_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Last_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CityCode = table.Column<int>(type: "int", nullable: false),
-                    CurrentNumber = table.Column<int>(type: "int", nullable: false)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Woreda = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Kebele = table.Column<int>(type: "int", nullable: false),
+                    Blood_Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SSNs", x => x.CityCode);
+                    table.PrimaryKey("PK_Citizens", x => x.SSN);
                     table.ForeignKey(
-                        name: "FK_SSNs_Cities_CityCode",
+                        name: "FK_Citizens_Cities_CityCode",
                         column: x => x.CityCode,
                         principalTable: "Cities",
                         principalColumn: "Code",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sectors",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Info_Type = table.Column<string>(type: "nvarchar(30)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sectors", x => x.Name);
+                    table.ForeignKey(
+                        name: "FK_Sectors_Information_Info_Type",
+                        column: x => x.Info_Type,
+                        principalTable: "Information",
+                        principalColumn: "Type",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -241,27 +263,6 @@ namespace ProjectLast.Migrations
                         column: x => x.SSN,
                         principalTable: "Citizens",
                         principalColumn: "SSN",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sectors",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Info_Type = table.Column<string>(type: "nvarchar(30)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sectors", x => x.Name);
-                    table.ForeignKey(
-                        name: "FK_Sectors_Information_Info_Type",
-                        column: x => x.Info_Type,
-                        principalTable: "Information",
-                        principalColumn: "Type",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -303,6 +304,11 @@ namespace ProjectLast.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Citizens_CityCode",
+                table: "Citizens",
+                column: "CityCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permissions_SSN",

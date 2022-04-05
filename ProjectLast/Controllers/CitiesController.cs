@@ -58,7 +58,19 @@ namespace ProjectLast.Controllers
         {
             if (ModelState.IsValid)
             {
+                //[Bind("CityCode,CurrentNumber")] SSN ss;
+                //var ssn = await _context.SSNs.E
+                //.FirstOrDefaultAsync(m => m.CityCode == city.Code);
+              
                 _context.Add(city);
+                await _context.SaveChangesAsync();
+                var codename = await _context.Cities.FirstOrDefaultAsync(m => m.Name == city.Name);
+                var cur = new SSN
+                {
+                    CityCode = codename.Code,
+                    CurrentNumber = 100000
+                };
+                _context.SSNs.Add(cur);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

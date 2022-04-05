@@ -72,13 +72,13 @@ namespace ProjectLast.Controllers
             {
                 var citize = await _context.Cities
               .FirstOrDefaultAsync(m => m.Code == citizen.CityCode);
-                ViewBag.result = citize.Name;
-                Console.WriteLine(citize.Name);
+               // ViewBag.result = citize.Name;
+                //Console.WriteLine(citize.Name);
+                citizen.City = citize.Name;
 
                 _context.Add(citizen);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return Content(citize.Name);
+                return RedirectToAction(nameof(Index));
             }
             return View(citizen);
         }
@@ -117,6 +117,12 @@ namespace ProjectLast.Controllers
             {
                 try
                 {
+                    var citize = await _context.Cities
+             .FirstOrDefaultAsync(m => m.Code == citizen.CityCode);
+                    ViewBag.result = citize.Name;
+                    Console.WriteLine(citize.Name);
+                    citizen.City = citize.Name;
+
                     _context.Update(citizen);
                     await _context.SaveChangesAsync();
                 }

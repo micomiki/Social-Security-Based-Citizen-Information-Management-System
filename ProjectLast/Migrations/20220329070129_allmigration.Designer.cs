@@ -10,8 +10,8 @@ using ProjectLast.Data;
 namespace ProjectLast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220328143022_allmi")]
-    partial class allmi
+    [Migration("20220329070129_allmigration")]
+    partial class allmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -254,6 +254,12 @@ namespace ProjectLast.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CityCode")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
 
@@ -268,10 +274,6 @@ namespace ProjectLast.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("POB")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -280,6 +282,8 @@ namespace ProjectLast.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SSN");
+
+                    b.HasIndex("CityCode");
 
                     b.ToTable("Citizens");
                 });
@@ -443,20 +447,20 @@ namespace ProjectLast.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectLast.Models.Citizen", b =>
+                {
+                    b.HasOne("ProjectLast.Models.City", null)
+                        .WithMany("Citizens")
+                        .HasForeignKey("CityCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProjectLast.Models.Permission", b =>
                 {
                     b.HasOne("ProjectLast.Models.Citizen", null)
                         .WithMany("Permission")
                         .HasForeignKey("SSN")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProjectLast.Models.SSN", b =>
-                {
-                    b.HasOne("ProjectLast.Models.City", null)
-                        .WithMany("SSN")
-                        .HasForeignKey("CityCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -477,7 +481,7 @@ namespace ProjectLast.Migrations
 
             modelBuilder.Entity("ProjectLast.Models.City", b =>
                 {
-                    b.Navigation("SSN");
+                    b.Navigation("Citizens");
                 });
 
             modelBuilder.Entity("ProjectLast.Models.Information", b =>

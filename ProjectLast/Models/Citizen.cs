@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectLast.Models
 {
+    [Table("Citizens")]
     public class Citizen
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -28,10 +29,12 @@ namespace ProjectLast.Models
         [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
 
-        [Display(Name = "City")]
+        [Display(Name = "City Code")]
         //[Required]
        // [DataType(DataType.Text)]
         public int CityCode { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
 
         [Required]
         [DataType(DataType.Text)]

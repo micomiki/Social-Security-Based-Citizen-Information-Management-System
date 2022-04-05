@@ -252,6 +252,9 @@ namespace ProjectLast.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CityCode")
                         .HasColumnType("int");
 
@@ -460,15 +463,6 @@ namespace ProjectLast.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectLast.Models.SSN", b =>
-                {
-                    b.HasOne("ProjectLast.Models.City", null)
-                        .WithMany("SSN")
-                        .HasForeignKey("CityCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ProjectLast.Models.Sector", b =>
                 {
                     b.HasOne("ProjectLast.Models.Information", null)
@@ -486,8 +480,6 @@ namespace ProjectLast.Migrations
             modelBuilder.Entity("ProjectLast.Models.City", b =>
                 {
                     b.Navigation("Citizens");
-
-                    b.Navigation("SSN");
                 });
 
             modelBuilder.Entity("ProjectLast.Models.Information", b =>

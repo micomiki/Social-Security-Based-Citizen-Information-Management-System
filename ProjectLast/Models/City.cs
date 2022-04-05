@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectLast.Models
 {
+    [Table("Cities")]
     public class City:IPrimaryProperties
     {
         [Key]
@@ -19,8 +20,7 @@ namespace ProjectLast.Models
         [Required]
         [DataType(DataType.Text)]
         public string Name { get; set; }
-        [ForeignKey("CityCode")]
-        public ICollection<SSN> SSN { get; set; }
+        
         
         [ForeignKey("CityCode")]
         public ICollection<Citizen> Citizens { get; set; }

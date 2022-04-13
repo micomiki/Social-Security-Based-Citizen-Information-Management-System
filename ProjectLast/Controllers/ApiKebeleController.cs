@@ -25,11 +25,26 @@ namespace ProjectLast.Controllers
         public async Task<ActionResult<IEnumerable<Citizen>>> GetCitizens() {
             return await _context.Citizens.ToListAsync();
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Citizen>> GetCitizen(int id)
+        [HttpGet("{City}/{SubCity}/{Woreda}/{Kebele}")]
+        public async Task<ActionResult<IEnumerable<Citizen>>> GetCitizen(string City, string SubCity, string Woreda, int Kebele)
         {
-            var citi = await _context.Citizens.FindAsync(id);
+            //return await _context.Citizens.ToListAsync().f
+            //
+            var citi = await _context.Citizens.Where(m => m.City == City && m.SubCity == SubCity && m.Woreda == Woreda && m.Kebele == Kebele).ToListAsync();
             if (citi == null) 
+            {
+                return NotFound();
+            }
+            return citi;
+
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Citizen>> GetCitizenn(int id)
+        {
+            //return await _context.Citizens.ToListAsync().f
+            //
+            var citi = await _context.Citizens.FindAsync(id);
+            if (citi == null)
             {
                 return NotFound();
             }
@@ -69,9 +84,16 @@ namespace ProjectLast.Controllers
             {
                 return BadRequest();
             }
+            var dob = citizen.DOB;
+            int age = 0;
+            age = DateTime.Now.Subtract(dob).Days;
+            age = age / 365;
+            //
+            citizen.Age = age;
             _context.Entry(citizen).State = EntityState.Modified;
             try
             {
+                
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) 

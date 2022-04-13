@@ -15,10 +15,17 @@ namespace ProjectLast.Models
         [Required]
         [Range(99999999,999999999)]
         public int SSN { get; set; }
+       
+        public string Image { get; set; }
         [Display(Name ="First Name")]
         [Required]
         [DataType(DataType.Text)]
+
         public string First_Name { get; set; }
+        [Display(Name = "Middle Name")]
+        [Required]
+        [DataType(DataType.Text)]
+        public string Mid_Name { get; set; }
         [Display(Name = "Last Name")]
         [Required]
         [DataType(DataType.Text)]
@@ -35,6 +42,9 @@ namespace ProjectLast.Models
         public int CityCode { get; set; }
         [Display(Name = "City")]
         public string City { get; set; }
+        [Required]
+        [DataType(DataType.Text)]
+        public string SubCity { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
